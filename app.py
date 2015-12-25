@@ -6,7 +6,7 @@ Bootstrap(app)
 
 @app.route("/")
 def hello():
-    return "Hello, world!"
+    return render_template('index.html')
 
 @app.route("/user/<name>")
 def show_user(name):
@@ -14,15 +14,15 @@ def show_user(name):
 
 @app.route("/game/<gamename>")
 def show_game(gamename):
-    return "Game page for game " + gamename
+    return render_template('game.html', gamename=gamename)
 
 @app.route("/game/<gamename>/submit")
 def show_submit_score(gamename):
-    return "Submit a score for game " + gamename
+    return render_template('submit.html', gamename=gamename)
 
 @app.route("/game/<gamename>/leaderboard")
 def show_leaderboard(gamename):
-    return "Show the leaderboard for game " + gamename
+    return render_template('leaderboard.html', gamename=gamename)
 
 if __name__ == "__main__":
     app.run(debug=True)
