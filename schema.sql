@@ -12,5 +12,6 @@ CREATE TABLE IF NOT EXISTS win (
        id serial PRIMARY KEY,
        winner integer REFERENCES player(id) NOT NULL,
        loser integer REFERENCES player(id) NOT NULL,
-       happened timestamp NOT NULL
+       happened timestamp NOT NULL DEFAULT (now()),
+       CONSTRAINT must_be_different CHECK (winner <> loser)
 );
