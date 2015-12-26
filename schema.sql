@@ -1,14 +1,14 @@
-CREATE TABLE player (
+CREATE TABLE IF NOT EXISTS player (
        id serial PRIMARY KEY,
        name varchar(40) UNIQUE NOT NULL
 );
 
-CREATE TABLE game (
+CREATE TABLE IF NOT EXISTS game (
        id serial PRIMARY KEY,
        name varchar(40) UNIQUE NOT NULL
 );
 
-CREATE TABLE win (
+CREATE TABLE IF NOT EXISTS win (
        id serial PRIMARY KEY,
        winner integer REFERENCES player(id) NOT NULL,
        loser integer REFERENCES player(id) NOT NULL,
