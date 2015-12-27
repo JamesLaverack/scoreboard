@@ -1,5 +1,6 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, url_for, redirect
 from flask_bootstrap import Bootstrap
+import db
 
 app = Flask(__name__)
 Bootstrap(app)
@@ -19,6 +20,15 @@ def show_game(gamename):
 @app.route("/game/<gamename>/submit")
 def show_submit_score(gamename):
     return render_template('submit.html', gamename=gamename)
+
+@app.route("/game/<gamename>/submit", methods=['POST'])
+def submit_score(gamename):
+    conn = db.database_connection()
+    cur = conn.cursor()
+    cur.execute("INSERT INTO win (winner, loser) VALUES ((SELECT id FROM player WHERE name = %s), (SELECT id FROM player WHERE name = %s))", (request.form['winnerName'], request.form['loserName'] ))
+    conn.commit()
+
+    return redirect(url_for('show_leaderboard', gamename=gamename))
 
 @app.route("/game/<gamename>/leaderboard")
 def show_leaderboard(gamename):

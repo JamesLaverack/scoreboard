@@ -8,4 +8,16 @@
 <div class="container">
   <h1>Submit score for game {{ gamename }}.</h1>
 </div>
+
+<form method="post">
+  <div class="form-group">
+    <label for="winnerName">Winner</label>
+    <input type="text" class="form-control" id="winnerName" name="winnerName" placeholder="Winner">
+  </div>
+  <div class="form-group">
+    <label for="loserName">Loser</label>
+    <input type="text" class="form-control" id="loserName" name="loserName" placeholder="loser">
+  </div>
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>
 {% endblock %}
