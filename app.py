@@ -25,7 +25,7 @@ def show_submit_score(gamename):
 def submit_score(gamename):
     conn = db.database_connection()
     cur = conn.cursor()
-    cur.execute("INSERT INTO win (winner, loser) VALUES ((SELECT id FROM player WHERE name = %s), (SELECT id FROM player WHERE name = %s))", (request.form['winnerName'], request.form['loserName'] ))
+    cur.execute("INSERT INTO win (winner, loser, game) VALUES ((SELECT id FROM player WHERE name = %s), (SELECT id FROM player WHERE name = %s), (SELECT id FROM game WHERE gamename = %s)", (request.form['winnerName'], request.form['loserName'], gamename ))
     conn.commit()
 
     return redirect(url_for('show_leaderboard', gamename=gamename))
