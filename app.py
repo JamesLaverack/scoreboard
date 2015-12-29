@@ -11,11 +11,28 @@ def hello():
 
 @app.route("/user/<name>")
 def show_user(name):
+
     return render_template('user.html', name=name)
 
 @app.route("/game/<gamename>")
 def show_game(gamename):
     return render_template('game.html', gamename=gamename)
+
+@app.route("/game/")
+def show_games():
+    cur = db.database_connection().cursor()
+    cur.execute("SELECT name FROM game");
+
+    return render_template('games.html', games=cur.fetchall());
+
+@app.route("/game/", methods=['POST'])
+def add_game():
+    conn = db.database_connection()
+    cur = conn.cursor()
+    cur.execute("INSERT INTO game (name) VALUES (%s)", [request.form['gameName']])
+    conn.commit()
+
+    return redirect(url_for('show_game', gamename=request.form['gameName']))
 
 @app.route("/game/<gamename>/submit")
 def show_submit_score(gamename):

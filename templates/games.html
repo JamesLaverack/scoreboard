@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{super()}} - List Games
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1>List Games</h1>
+
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Games</h3>
+    </div>
+    {% if games|length > 0%}
+    <ul class="list-group">
+      {% for game in games -%}
+      <li class="list-group-item">{{ game[0] }}</li>
+      {%- endfor %}
+    </ul>
+    {% else %}
+    <div class="panel-body center-block">
+      No games yet =(
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="row">
+    <form method="post" class="col-xs-4 pull-right">
+      <div class="input-group">
+	<input type="text" class="form-control" name="gameName" placeholder="name">
+	<span class="input-group-btn">
+          <button class="btn btn-primary" type="submit">Add New Game</button>
+	</span>
+      </div>
+    </form>
+  </div>
+
+</div>
+{% endblock %}
