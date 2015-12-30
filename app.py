@@ -21,9 +21,9 @@ def show_game(gamename):
 @app.route("/game/")
 def show_games():
     cur = db.database_connection().cursor()
-    cur.execute("SELECT name FROM game");
+    cur.execute("SELECT name FROM game")
 
-    return render_template('games.html', games=cur.fetchall());
+    return render_template('games.html', games=cur.fetchall())
 
 @app.route("/game/", methods=['POST'])
 def add_game():
