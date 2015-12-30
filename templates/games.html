@@ -16,7 +16,23 @@
     {% if games|length > 0%}
     <ul class="list-group">
       {% for game in games -%}
-      <li class="list-group-item">{{ game[0] }}</li>
+      <li class="list-group-item">
+	<div class="row">
+	  <div class="col-md-4">
+	    {{ game[0] }}
+	  </div>
+	  <div class="col-md-4 col-md-offset-4">
+	    <div class="btn-group pull-right">
+	      <a href="{{ url_for('show_game', gamename=game[0]) }}" type="button" class="btn btn-success">
+		<i class="fa fa-th-large"></i> Details
+	      </a>
+	      <a href="{{ url_for('show_leaderboard', gamename=game[0]) }}" type="button" class="btn btn-default">
+		<i class="fa fa-th-list"></i> Leaderboard
+	      </a>
+	    </div>
+	</div>
+	</div>
+      </li>
       {%- endfor %}
     </ul>
     {% else %}
@@ -31,7 +47,7 @@
       <div class="input-group">
 	<input type="text" class="form-control" name="gameName" placeholder="name">
 	<span class="input-group-btn">
-          <button class="btn btn-primary" type="submit">Add New Game</button>
+          <button class="btn btn-primary" type="submit"><i class="fa fa-plus"></i> Add New Game</button>
 	</span>
       </div>
     </form>
