@@ -45,7 +45,7 @@ def submit_score(gamename):
     cur.execute("INSERT INTO win (winner, loser, game) VALUES ((SELECT id FROM player WHERE name = %s), (SELECT id FROM player WHERE name = %s), (SELECT id FROM game WHERE gamename = %s)", (request.form['winnerName'], request.form['loserName'], gamename ))
     conn.commit()
 
-    return redirect(url_for('show_leaderboard', gamename=gamename))
+    return redirect(url_for('show_game', gamename=gamename))
 
 @app.route("/game/<gamename>/leaderboard")
 def show_leaderboard(gamename):
