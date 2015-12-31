@@ -7,5 +7,45 @@
 {% block content %}
 <div class="container">
   <h1>Game page for {{ gamename }}.</h1>
+
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title">Recent Plays</h3>
+    </div>
+    {% if wins|length >0 %}
+    <table class="table">
+      <tr>
+	<th>Winner</th>
+	<th>Loser</th>
+      </tr>
+      {% for win in wins %}
+      <tr>
+	<td>{{ win[0] }}</td>
+	<td>{{ win[1] }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% else %}
+    <div class="panel-body">
+      No recent games. =(
+    </div>
+    {% endif %}
+    <div class="panel-footer">
+      <a href="{{ url_for('show_submit_score', gamename=gamename) }}" class="btn btn-primary"><i class="fa fa-paper-plane"></i> Submit Score</a>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Leaderboard</h3>
+    </div>
+    <div class="panel-body">
+      TBC
+    </div>
+    <div class="panel-footer">
+      <a href="{{ url_for('show_leaderboard', gamename=gamename) }}" class="btn btn-default"><i class="fa fa-th-list"></i> Full Leaderbaoard</a>
+    </div>
+  </div>
+
 </div>
 {% endblock %}

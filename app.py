@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, redirect
+from flask import Flask, render_template, request, url_for, redirect, abort
 from flask_bootstrap import Bootstrap
 import db
 
@@ -16,7 +16,17 @@ def show_user(name):
 
 @app.route("/game/<gamename>")
 def show_game(gamename):
-    return render_template('game.html', gamename=gamename)
+    cur = db.database_connection().cursor()
+    cur.execute("SELECT id FROM game WHERE name = %s", [gamename])
+    id = cur.fetchone()
+
+    cur.execute("SELECT winner.name, loser.name FROM win JOIN player winner ON winner.id = win.winner JOIN player loser ON loser.id = win.loser WHERE win.game = %s ORDER BY win.happened DESC LIMIT 3", [id])
+    wins = cur.fetchall()
+
+    if id is None:
+        abort(404)
+
+    return render_template('game.html', gamename=gamename, wins=wins)
 
 @app.route("/game/")
 def show_games():
