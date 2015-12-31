@@ -38,11 +38,30 @@ def add_game():
 def show_submit_score(gamename):
     return render_template('submit.html', gamename=gamename)
 
-@app.route("/game/<gamename>/submit", methods=['POST'])
-def submit_score(gamename):
+def get_or_create_id_for_player(playerName):
     conn = db.database_connection()
     cur = conn.cursor()
-    cur.execute("INSERT INTO win (winner, loser, game) VALUES ((SELECT id FROM player WHERE name = %s), (SELECT id FROM player WHERE name = %s), (SELECT id FROM game WHERE gamename = %s)", (request.form['winnerName'], request.form['loserName'], gamename ))
+
+    cur.execute("SELECT id FROM player WHERE name = %s", [playerName])
+    playerId = cur.fetchone();
+
+    # If it doesn't exist, make it
+    if playerId is None:
+        cur.execute("INSERT INTO player (name) VALUES (%s)", [playerName])
+        conn.commit()
+        cur.execute("SELECT id FROM player WHERE name = %s", [playerName])
+        playerId = cur.fetchone()
+
+    return playerId
+
+@app.route("/game/<gamename>/submit", methods=['POST'])
+def submit_score(gamename):
+    winnerId = get_or_create_id_for_player(request.form['winnerName'])
+    loserId = get_or_create_id_for_player(request.form['loserName'])
+
+    conn = db.database_connection()
+    cur = conn.cursor()
+    cur.execute("INSERT INTO win (winner, loser, game) VALUES (%s, %s, (SELECT id FROM game WHERE name = %s))", (winnerId, loserId, gamename))
     conn.commit()
 
     return redirect(url_for('show_game', gamename=gamename))
