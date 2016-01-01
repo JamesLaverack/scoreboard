@@ -6,7 +6,7 @@ app = Flask(__name__)
 Bootstrap(app)
 
 @app.route("/")
-def hello():
+def show_index():
     return render_template('index.html')
 
 @app.route("/user/<name>")
