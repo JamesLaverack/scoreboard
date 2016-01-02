@@ -4,10 +4,12 @@
 {{super()}} - {{ gamename }}
 {% endblock %}
 
+{% block titlebar %}
+<h1>{{ gamename }}</h1>
+{% endblock %}
+
 {% block content %}
 <div class="container">
-  <h1>Game page for {{ gamename }}.</h1>
-
   <div class="panel panel-primary">
     <div class="panel-heading">
       <h3 class="panel-title">Recent Plays</h3>
