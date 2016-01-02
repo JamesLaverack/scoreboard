@@ -6,6 +6,33 @@
 
 {% block content %}
 <div class="container">
-  <h1>Leaderboard page for {{ gamename }}.</h1>
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title">Leaderboard</h3>
+    </div>
+    {% if leaderboard|length > 0 %}
+    <table class="table">
+      <tr>
+	<th>Rank</th>
+	<th>Player</th>
+      </tr>
+      {% for rank in leaderboard %}
+      <tr>
+	<td>{{ rank['rank'] }}</td>
+	<td>{{ rank['name'] }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% else %}
+    <div class="panel-body center-text">
+      There are no ranked players for {{ gamename }}.
+    </div>
+    {% endif %}
+    <div class="panel-footer">
+      <a href="{{ url_for('show_game', gamename=gamename) }}" type="button" class="btn btn-default">
+	<i class="fa fa-th-large"></i> Game Details
+      </a>
+    </div>
+  </div>
 </div>
 {% endblock %}

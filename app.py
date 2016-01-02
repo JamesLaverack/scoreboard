@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, url_for, redirect, abort
 from flask_bootstrap import Bootstrap
 import db
+import rpi
 
 app = Flask(__name__)
 Bootstrap(app)
@@ -20,11 +21,11 @@ def show_game(gamename):
     cur.execute("SELECT id FROM game WHERE name = %s", [gamename])
     id = cur.fetchone()
 
-    cur.execute("SELECT winner.name, loser.name FROM win JOIN player winner ON winner.id = win.winner JOIN player loser ON loser.id = win.loser WHERE win.game = %s ORDER BY win.happened DESC LIMIT 3", [id])
-    wins = cur.fetchall()
-
     if id is None:
         abort(404)
+
+    cur.execute("SELECT winner.name, loser.name FROM win JOIN player winner ON winner.id = win.winner JOIN player loser ON loser.id = win.loser WHERE win.game = %s ORDER BY win.happened DESC LIMIT 3", [id])
+    wins = cur.fetchall()
 
     return render_template('game.html', gamename=gamename, wins=wins)
 
@@ -76,9 +77,19 @@ def submit_score(gamename):
 
     return redirect(url_for('show_game', gamename=gamename))
 
+def game_exists(gamename):
+    cur = db.database_connection().cursor()
+    cur.execute("SELECT id FROM game WHERE name = %s", [gamename])
+    return cur.fetchone() is not None
+
 @app.route("/game/<gamename>/leaderboard")
 def show_leaderboard(gamename):
-    return render_template('leaderboard.html', gamename=gamename)
+    if not game_exists(gamename):
+        abort(404)
+
+    leaderboard = rpi.generate_leaderboard(rpi.calculate_rpi(gamename))
+    print("Final leaderboard: %s" % leaderboard)
+    return render_template('leaderboard.html', gamename=gamename, leaderboard=leaderboard)
 
 if __name__ == "__main__":
     app.run(debug=True)
