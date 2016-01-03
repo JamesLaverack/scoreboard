@@ -13,6 +13,14 @@ def show_index():
     popularGames = [x[0] for x in cur.fetchall()]
     return render_template('index.html', popularGames=popularGames)
 
+@app.route("/player/")
+def show_players():
+    cur = db.database_connection().cursor()
+    cur.execute("SELECT name FROM player")
+    players = [x[0] for x in cur.fetchall()]
+
+    return render_template('players.html', players=players)
+
 @app.route("/player/<name>")
 def show_player(name):
     if not player_exists(name):

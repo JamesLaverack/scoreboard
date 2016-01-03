@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{super()}} - List Players
+{% endblock %}
+
+{% block titlebar %}
+<h1>Players List</h1>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title">Players</h3>
+    </div>
+    {% if players|length > 0%}
+    <ul class="list-group">
+      {% for player in players %}
+      <li class="list-group-item">
+	<div class="row">
+	  <div class="col-md-4">
+	    <h5>{{ player }}</h5>
+	  </div>
+	  <div class="col-md-4 col-md-offset-4">
+	    <div class="btn-group pull-right">
+	      <a href="{{ url_for('show_player', name=player) }}" type="button" class="btn btn-success">
+		<i class="fa fa-user"></i> Profile
+	      </a>
+	    </div>
+	  </div>
+	</div>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <div class="panel-body center-block">
+      No players yet. =(
+    </div>
+    {% endif %}
+    <div class="panel-footer">
+      To add a new user, simply submit a score with that user for a game.
+    </div>
+  </div>
+</div>
+{% endblock %}
