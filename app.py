@@ -15,9 +15,9 @@ def show_index():
     popularGames = [x['name'] for x in cur.fetchall()]
 
     cur.execute("SELECT game.name AS game_name, winner.name AS winner_name, loser.name AS loser_name FROM score JOIN game ON score.game_id = game.id  JOIN player winner ON winner.id = score.winner_id JOIN player loser ON loser.id = score.loser_id ORDER BY score.happened DESC LIMIT 5")
-    recentWins = cur.fetchall()
+    recentScores = cur.fetchall()
 
-    return render_template('index.html', popularGames=popularGames, recentWins=recentWins)
+    return render_template('index.html', popularGames=popularGames, recentScores=recentScores)
 
 @app.route("/player/")
 def show_players():
@@ -36,19 +36,21 @@ def show_player(name):
 
 @app.route("/game/<gamename>")
 def show_game(gamename):
-    cur = db.database_connection().cursor()
+    cur = db.database_connection().cursor(cursor_factory = psycopg2.extras.DictCursor)
     cur.execute("SELECT id FROM game WHERE name = %s", [gamename])
     id = cur.fetchone()
 
     if id is None:
         abort(404)
 
-    cur.execute("SELECT winner.name, loser.name FROM score JOIN player winner ON winner.id = score.winner_id JOIN player loser ON loser.id = score.loser_id WHERE score.game_id = %s ORDER BY score.happened DESC LIMIT 3", [id])
-    wins = cur.fetchall()
+    id = id['id']
+
+    cur.execute("SELECT winner.name AS winner_name, loser.name AS loser_name FROM score JOIN player winner ON winner.id = score.winner_id JOIN player loser ON loser.id = score.loser_id WHERE score.game_id = %s ORDER BY score.happened DESC LIMIT 3", [id])
+    scores = cur.fetchall()
 
     leaderboard = rpi.generate_leaderboard(rpi.calculate_rpi(gamename))
 
-    return render_template('game.html', gamename=gamename, wins=wins, leaderboard=leaderboard)
+    return render_template('game.html', gamename=gamename, scores=scores, leaderboard=leaderboard)
 
 @app.route("/game/")
 def show_games():

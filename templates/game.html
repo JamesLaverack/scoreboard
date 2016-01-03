@@ -12,24 +12,24 @@
 <div class="container">
   <div class="panel panel-primary">
     <div class="panel-heading">
-      <h3 class="panel-title">Recent Plays</h3>
+      <h3 class="panel-title">Recent Scores</h3>
     </div>
-    {% if wins|length >0 %}
+    {% if scores|length >0 %}
     <table class="table">
       <tr>
 	<th>Winner</th>
 	<th>Loser</th>
       </tr>
-      {% for win in wins %}
+      {% for score in scores %}
       <tr>
-	<td>{{ win[0] }}</td>
-	<td>{{ win[1] }}</td>
+	<td>{{ score['winner_name'] }}</td>
+	<td>{{ score['loser_name'] }}</td>
       </tr>
       {% endfor %}
     </table>
     {% else %}
     <div class="panel-body">
-      No recent games. =(
+      No recent scores. =(
     </div>
     {% endif %}
     <div class="panel-footer">
