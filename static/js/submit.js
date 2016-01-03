@@ -7,8 +7,6 @@ var players_bloodhound = new Bloodhound({
     }
 });
 
-players_bloodhound.initialize();
-
 $('.player-list').typeahead({
     name: 'players',
     source: players_bloodhound.ttAdapter()
