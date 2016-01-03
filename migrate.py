@@ -1,5 +1,6 @@
 import db
 
+
 def create_tables():
     conn = db.database_connection()
     cur = conn.cursor()

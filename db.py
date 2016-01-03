@@ -2,6 +2,7 @@ import urllib.parse
 import os
 import psycopg2
 
+
 def database_connection():
     parts = urllib.parse.urlparse(os.environ["DATABASE_URL"])
     username = parts.username
@@ -10,8 +11,8 @@ def database_connection():
     hostname = parts.hostname
 
     return psycopg2.connect(
-        database = database,
-        user = username,
-        password = password,
-        host = hostname
+        database=database,
+        user=username,
+        password=password,
+        host=hostname
     )

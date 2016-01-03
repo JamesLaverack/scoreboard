@@ -1,13 +1,14 @@
 import db
 import os
 import operator
-import logging
+
 
 def win_percentage(wins, loses):
     totalGames = wins + loses
     if totalGames == 0:
         return None
     return wins / totalGames
+
 
 def generate_leaderboard(scores):
     print("Raw scores: %s" % scores)
@@ -23,9 +24,10 @@ def generate_leaderboard(scores):
         if score[1] != lastSeenScore:
             currentPlace += 1
         lastSeenScore = score[1]
-        leaderboard.append({'name' : score[0], 'rank' : currentPlace})
+        leaderboard.append({'name': score[0], 'rank': currentPlace})
 
     return leaderboard
+
 
 def calculate_rpi(gameName):
     # Use the database directly, let PostgreSQL do the heavy lifting
@@ -55,8 +57,8 @@ def calculate_rpi(gameName):
     print("Win Percentages %s" % [winPercentages])
 
     # Weight the Win Percentage and the Opp win Percentage
-    oppWinPercentageWeight = float(os.environ["OPPONENTS_WIN_PERCENTAGE_WEIGHT"])
-    winPercentageWeight = 1 - oppWinPercentageWeight
+    oppWinPerWeight = float(os.environ["OPPONENTS_WIN_PERCENTAGE_WEIGHT"])
+    winPerWeight = 1 - oppWinPerWeight
 
     scores = {}
     oppWinPercentages = {}
@@ -72,7 +74,8 @@ def calculate_rpi(gameName):
         oppWinPercentage /= len(opponents)
 
         # Calculate this player's score
-        scores[playerName] = winPercentages[playerName] * winPercentageWeight + oppWinPercentage * oppWinPercentageWeight
+        scores[playerName] = winPercentages[playerName] * winPerWeight
+        + oppWinPercentage * oppWinPerWeight
     print("Scores: %s" % scores)
 
     return scores
