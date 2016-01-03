@@ -50,7 +50,15 @@ def show_player(name):
     if not player_exists(name):
         abort(404)
 
-    return render_template('player.html', name=name)
+    conn = db.database_connection()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+    cur.execute("SELECT game.name AS game_name, winner.name AS winner_name, loser.name AS loser_name FROM score JOIN game ON score.game_id = game.id  JOIN player winner ON winner.id = score.winner_id JOIN player loser ON loser.id = score.loser_id WHERE winner.name = %s OR loser.name = %s ORDER BY score.happened DESC LIMIT 5", [name, name])
+    recentScores = cur.fetchall()
+
+    return render_template('player.html',
+                           name=name,
+                           recentScores=recentScores)
 
 
 @app.route("/game/<gamename>")

@@ -10,6 +10,30 @@
 
 {% block content %}
 <div class="container">
-  
+    <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title">Recent Scores</h3>
+    </div>
+    {% if recentScores|length > 0 %}
+    <table class="table">
+      <tr>
+	<th>Game</th>
+	<th>Winner</th>
+	<th>Loser</th>
+      </tr>
+      {% for score in recentScores %}
+      <tr>
+	<td>{{ score['game_name'] }}</td>
+	<td>{{ score['winner_name'] }}</td>
+	<td>{{ score['loser_name'] }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% else %}
+    <div class="panel-body">
+      No recent scores. =(
+    </div>
+    {% endif %}
+  </div>
 </div>
 {% endblock %}
