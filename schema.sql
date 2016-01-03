@@ -10,11 +10,11 @@ CREATE TABLE IF NOT EXISTS game (
        created timestamp NOT NULL DEFAULT (now())
 );
 
-CREATE TABLE IF NOT EXISTS win (
+CREATE TABLE IF NOT EXISTS score (
        id serial PRIMARY KEY,
-       winner integer REFERENCES player(id) NOT NULL,
-       loser integer REFERENCES player(id) NOT NULL,
-       game integer REFERENCES game(id) NOT NULL,
+       winner_id integer REFERENCES player(id) NOT NULL,
+       loser_id integer REFERENCES player(id) NOT NULL,
+       game_id integer REFERENCES game(id) NOT NULL,
        happened timestamp NOT NULL DEFAULT (now()),
-       CONSTRAINT must_be_different CHECK (winner <> loser)
+       CONSTRAINT must_be_different CHECK (winner_id <> loser_id)
 );

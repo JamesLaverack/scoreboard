@@ -39,16 +39,16 @@ def calculate_rpi(gameName):
     # Only players who have played this game enough count
     gameThreashold = int(os.environ["LEADERBOARD_GAME_THREASHOLD"])
 
-    cur.execute("SELECT id, name FROM player, (SELECT count(*) FROM win WHERE (win.winner = id OR win.loser = id) AND win.game = %s) AS games_played WHERE games_played.count >= %s", [gameId, gameThreashold])
+    cur.execute("SELECT id, name FROM player, (SELECT count(*) FROM score WHERE (score.winner_id = id OR score.loser_id = id) AND score.game_id = %s) AS games_played WHERE games_played.count >= %s", [gameId, gameThreashold])
     players = cur.fetchall()
 
     print("Valid Players: %s" % [players])
     winPercentages = {}
     for playerId, playerName in players:
         # Calculate win percentage for each player
-        cur.execute("SELECT count(*) FROM win WHERE win.game = %s AND win.winner = %s", [gameId, playerId])
+        cur.execute("SELECT count(*) FROM score WHERE score.game_id = %s AND score.winner_id = %s", [gameId, playerId])
         numWins = cur.fetchone()[0]
-        cur.execute("SELECT count(*) FROM win WHERE win.game = %s AND win.loser = %s", [gameId, playerId])
+        cur.execute("SELECT count(*) FROM score WHERE score.game_id = %s AND score.loser_id = %s", [gameId, playerId])
         numLoses = cur.fetchone()[0]
         winPercentages[playerName] = win_percentage(numWins, numLoses)
     print("Win Percentages %s" % [winPercentages])
@@ -61,7 +61,7 @@ def calculate_rpi(gameName):
     oppWinPercentages = {}
     for playerId, playerName in players:
         # Find the ids of this player's opponents
-        cur.execute("SELECT player.name FROM player WHERE player.id IN ((SELECT winner FROM win WHERE win.game = %s AND win.loser = %s) UNION (SELECT loser FROM win WHERE win.game = %s AND win.winner = %s))", [gameId, playerId, gameId, playerId])
+        cur.execute("SELECT player.name FROM player WHERE player.id IN ((SELECT winner_id FROM score WHERE score.game_id = %s AND score.loser_id = %s) UNION (SELECT loser_id FROM score WHERE score.game_id = %s AND score.winner_id = %s))", [gameId, playerId, gameId, playerId])
         opponents = cur.fetchall()
 
         oppWinPercentage = 0
