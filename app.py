@@ -10,10 +10,12 @@ flask_bootstrap.Bootstrap(app)
 def show_index():
     return render_template('index.html')
 
-@app.route("/user/<name>")
-def show_user(name):
+@app.route("/player/<name>")
+def show_player(name):
+    if not player_exists(name):
+        abort(404)
 
-    return render_template('user.html', name=name)
+    return render_template('player.html', name=name)
 
 @app.route("/game/<gamename>")
 def show_game(gamename):
@@ -86,6 +88,11 @@ def submit_score(gamename):
 def game_exists(gamename):
     cur = db.database_connection().cursor()
     cur.execute("SELECT id FROM game WHERE name = %s", [gamename])
+    return cur.fetchone() is not None
+
+def player_exists(name):
+    cur = db.database_connection().cursor()
+    cur.execute("SELECT id FROM player WHERE name = %s", [name])
     return cur.fetchone() is not None
 
 @app.route("/game/<gamename>/leaderboard")

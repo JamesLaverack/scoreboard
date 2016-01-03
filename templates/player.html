@@ -4,8 +4,12 @@
 {{super()}} - {{ name }}
 {% endblock %}
 
+{% block titlebar %}
+<h1>{{ name }}</h1>
+{% endblock %}
+
 {% block content %}
 <div class="container">
-  <h1>User page for {{ name }}.</h1>
+  
 </div>
 {% endblock %}
