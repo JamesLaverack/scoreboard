@@ -1,10 +1,10 @@
 from flask import Flask, render_template, request, url_for, redirect, abort
-from flask_bootstrap import Bootstrap
+import flask_bootstrap
 import db
 import rpi
 
 app = Flask(__name__)
-Bootstrap(app)
+flask_bootstrap.Bootstrap(app)
 
 @app.route("/")
 def show_index():
