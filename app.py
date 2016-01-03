@@ -46,7 +46,9 @@ def show_game(gamename):
     cur.execute("SELECT winner.name, loser.name FROM score JOIN player winner ON winner.id = score.winner_id JOIN player loser ON loser.id = score.loser_id WHERE score.game_id = %s ORDER BY score.happened DESC LIMIT 3", [id])
     wins = cur.fetchall()
 
-    return render_template('game.html', gamename=gamename, wins=wins)
+    leaderboard = rpi.generate_leaderboard(rpi.calculate_rpi(gamename))
+
+    return render_template('game.html', gamename=gamename, wins=wins, leaderboard=leaderboard)
 
 @app.route("/game/")
 def show_games():
