@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, url_for, redirect, abort
 import flask_bootstrap
 import db
+import os
 import rpi
 import psycopg2.extras
 
@@ -116,9 +117,11 @@ def show_leaderboard(gamename):
     if not game_exists(gamename):
         abort(404)
 
+    scoreThreashold = int(os.environ["LEADERBOARD_SCORE_THREASHOLD"])
+
     leaderboard = rpi.generate_leaderboard(rpi.calculate_rpi(gamename))
     print("Final leaderboard: %s" % leaderboard)
-    return render_template('leaderboard.html', gamename=gamename, leaderboard=leaderboard)
+    return render_template('leaderboard.html', gamename=gamename, leaderboard=leaderboard, scoreThreashold=scoreThreashold)
 
 if __name__ == "__main__":
     app.run(debug=True)
