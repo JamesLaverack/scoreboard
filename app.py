@@ -8,7 +8,10 @@ flask_bootstrap.Bootstrap(app)
 
 @app.route("/")
 def show_index():
-    return render_template('index.html')
+    cur = db.database_connection().cursor()
+    cur.execute("SELECT name FROM (SELECT game.name, count(win.id) AS num_games FROM game LEFT JOIN win ON win.game = game.id GROUP BY game.name) AS games WHERE num_games > 3 ORDER BY num_games")
+    popularGames = [x[0] for x in cur.fetchall()]
+    return render_template('index.html', popularGames=popularGames)
 
 @app.route("/player/<name>")
 def show_player(name):

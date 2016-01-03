@@ -1,7 +1,72 @@
 {% extends "base.html" %}
 
+{% block titlebar %}
+<h1>Scoreboard</h1>
+{% endblock %}
+
 {% block content %}
 <div class="container">
-  <h1>Index page for Scoreboard.</h1>
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title">Popular Games</h3>
+    </div>
+    {% if popularGames|length > 0 %}
+    <ul class="list-group">
+      {% for game in popularGames %}
+      <li class="list-group-item">
+	<div class="row">
+	  <div class="col-md-4">
+	    <h5>{{ game }}</h5>
+	  </div>
+	  <div class="col-md-4 col-md-offset-4">
+	    <div class="btn-group pull-right">
+	      <a href="{{ url_for('show_game', gamename=game) }}" type="button" class="btn btn-success">
+		<i class="fa fa-th-large"></i> Details
+	      </a>
+	      <a href="{{ url_for('show_leaderboard', gamename=game) }}" type="button" class="btn btn-default">
+		<i class="fa fa-th-list"></i> Leaderboard
+	      </a>
+	    </div>
+	  </div>
+	</div>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <div class="panel-body">
+      No popular games. =(
+    </div>
+    {% endif %}
+    <div class="panel-footer">
+      <a href="{{ url_for('show_games') }}" class="btn btn-default"><i class="fa fa-tasks"></i> All Games</a>
+    </div>
+  </div>
+
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Recent Plays</h3>
+    </div>
+    {% if wins|length > 0 %}
+    <table class="table">
+      <tr>
+	<th>Game</th>
+	<th>Winner</th>
+	<th>Loser</th>
+      </tr>
+      {% for win in wins %}
+      <tr>
+	<td>{{ win[0] }}</td>
+	<td>{{ win[1] }}</td>
+	<td>{{ win[2] }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% else %}
+    <div class="panel-body">
+      No recent games. =(
+    </div>
+    {% endif %}
+  </div>
 </div>
 {% endblock %}
