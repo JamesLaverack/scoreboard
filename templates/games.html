@@ -17,11 +17,11 @@
     </div>
     {% if games|length > 0%}
     <ul class="list-group">
-      {% for game in games -%}
+      {% for game in games %}
       <li class="list-group-item">
 	<div class="row">
 	  <div class="col-md-4">
-	    {{ game[0] }}
+	    <h5>{{ game[0] }}</h5>
 	  </div>
 	  <div class="col-md-4 col-md-offset-4">
 	    <div class="btn-group pull-right">
@@ -32,10 +32,10 @@
 		<i class="fa fa-th-list"></i> Leaderboard
 	      </a>
 	    </div>
-	</div>
+	  </div>
 	</div>
       </li>
-      {%- endfor %}
+      {% endfor %}
     </ul>
     {% else %}
     <div class="panel-body center-block">
