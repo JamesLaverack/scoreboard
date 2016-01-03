@@ -47,6 +47,9 @@ def add_game():
 
 @app.route("/game/<gamename>/submit")
 def show_submit_score(gamename):
+    if not game_exists(gamename):
+        abort(404)
+
     return render_template('submit.html', gamename=gamename)
 
 def get_or_create_id_for_player(playerName):
@@ -67,6 +70,9 @@ def get_or_create_id_for_player(playerName):
 
 @app.route("/game/<gamename>/submit", methods=['POST'])
 def submit_score(gamename):
+    if not game_exists(gamename):
+        abort(404)
+
     winnerId = get_or_create_id_for_player(request.form['winnerName'])
     loserId = get_or_create_id_for_player(request.form['loserName'])
 
