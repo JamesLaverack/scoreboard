@@ -2,16 +2,21 @@ from flask import Flask, render_template, request, url_for, redirect, abort
 import flask_bootstrap
 import db
 import rpi
+import psycopg2.extras
 
 app = Flask(__name__)
 flask_bootstrap.Bootstrap(app)
 
 @app.route("/")
 def show_index():
-    cur = db.database_connection().cursor()
+    cur = db.database_connection().cursor(cursor_factory = psycopg2.extras.DictCursor)
     cur.execute("SELECT name FROM (SELECT game.name, count(win.id) AS num_games FROM game LEFT JOIN win ON win.game = game.id GROUP BY game.name) AS games WHERE num_games > 3 ORDER BY num_games")
-    popularGames = [x[0] for x in cur.fetchall()]
-    return render_template('index.html', popularGames=popularGames)
+    popularGames = [x['name'] for x in cur.fetchall()]
+
+    cur.execute("SELECT game.name AS game_name, winner.name AS winner_name, loser.name AS loser_name FROM win JOIN game ON win.game = game.id  JOIN player winner ON winner.id = win.winner JOIN player loser ON loser.id = win.loser ORDER BY win.happened DESC LIMIT 5")
+    recentWins = cur.fetchall()
+
+    return render_template('index.html', popularGames=popularGames, recentWins=recentWins)
 
 @app.route("/player/")
 def show_players():

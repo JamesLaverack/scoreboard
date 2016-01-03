@@ -47,18 +47,18 @@
     <div class="panel-heading">
       <h3 class="panel-title">Recent Plays</h3>
     </div>
-    {% if wins|length > 0 %}
+    {% if recentWins|length > 0 %}
     <table class="table">
       <tr>
 	<th>Game</th>
 	<th>Winner</th>
 	<th>Loser</th>
       </tr>
-      {% for win in wins %}
+      {% for win in recentWins %}
       <tr>
-	<td>{{ win[0] }}</td>
-	<td>{{ win[1] }}</td>
-	<td>{{ win[2] }}</td>
+	<td>{{ win['game_name'] }}</td>
+	<td>{{ win['winner_name'] }}</td>
+	<td>{{ win['loser_name'] }}</td>
       </tr>
       {% endfor %}
     </table>
