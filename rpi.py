@@ -37,9 +37,10 @@ def calculate_rpi(gameName):
     gameId = cur.fetchone()
 
     # Only players who have played this game enough count
-    gameThreashold = int(os.environ["LEADERBOARD_GAME_THREASHOLD"])
+    scoreThreashold = int(os.environ["LEADERBOARD_SCORE_THREASHOLD"])
 
-    cur.execute("SELECT id, name FROM player, (SELECT count(*) FROM score WHERE (score.winner_id = id OR score.loser_id = id) AND score.game_id = %s) AS games_played WHERE games_played.count >= %s", [gameId, gameThreashold])
+    print("Using Score Threashold: %s" % scoreThreashold)
+    cur.execute("SELECT player.id, player.name FROM player WHERE (SELECT count(*) FROM score WHERE score.game_id = %s AND (score.winner_id = player.id OR score.loser_id = player.id)) >= %s", [gameId, scoreThreashold])
     players = cur.fetchall()
 
     print("Valid Players: %s" % [players])

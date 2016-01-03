@@ -10,5 +10,5 @@ Scoring is calculated as a simple win percentage, weighted by the opponents win 
 # Environment Variables
 
 * `DATABASE_URL` specifies the database. e.g. "postgres://username:password@host/database"
-* `LEADERBOARD_GAME_THREASHOLD` specifies the number of games a player must have played to be ranked. Unranked players do not contribute to opponent's win percentage calcualtions. This must be an integer value.
+* `LEADERBOARD_SCORE_THREASHOLD` specifies the number of times a player must have played to be ranked. Unranked players do not contribute to opponent's win percentage calcualtions. This must be an integer value.
 * `OPPONENTS_WIN_PERCENTAGE_WEIGHT` specifies the weighting of the opponent's win percentage along with that players. This must be a floating point value between 0.0 and 1.0 inclusive.
