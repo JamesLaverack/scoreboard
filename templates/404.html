@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{super()}} - 404 Not Found
+{% endblock %}
+
+{% block titlebar %}
+<h1>Not Found</h1>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title">404</h3>
+    </div>
+    <div class="panel-body">
+      We couldn't find that page.
+    </div>
+  </div>
+</div>
+{% endblock %}
