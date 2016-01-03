@@ -11,7 +11,7 @@ def win_percentage(wins, loses):
 
 def generate_leaderboard(scores):
     print("Raw scores: %s" % scores)
-    sortedScores = sorted(scores.items(), key=operator.itemgetter(0))
+    sortedScores = sorted(scores.items(), key=operator.itemgetter(1))
     sortedScores.reverse()
     print("Sorted scores: %s" % sortedScores)
 
