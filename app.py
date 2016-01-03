@@ -11,7 +11,8 @@ flask_bootstrap.Bootstrap(app)
 
 @app.route("/")
 def show_index():
-    cur = db.database_connection().cursor(cursor_factory = psycopg2.extras.DictCursor)
+    conn = db.database_connection()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     cur.execute("SELECT name FROM (SELECT game.name, count(score.id) AS num_games FROM game LEFT JOIN score ON score.game_id = game.id GROUP BY game.name) AS games WHERE num_games > 3 ORDER BY num_games")
     popularGames = [x['name'] for x in cur.fetchall()]
 
