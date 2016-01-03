@@ -4,10 +4,22 @@ import db
 import os
 import rpi
 import psycopg2.extras
+import json
 
 app = Flask(__name__)
 flask_bootstrap.Bootstrap(app)
 
+
+# This method is used by typeahead.js
+@app.route("/api/v1/player")
+def api_list_players():
+    conn = db.database_connection()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+    cur.execute("SELECT name FROM player")
+    names = [rec['name'] for rec in cur.fetchall()]
+
+    return json.dumps(names)
 
 @app.route("/")
 def show_index():
