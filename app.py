@@ -21,6 +21,7 @@ def api_list_players():
 
     return json.dumps(names)
 
+
 @app.route("/")
 def show_index():
     conn = db.database_connection()
