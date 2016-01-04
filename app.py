@@ -22,6 +22,14 @@ def api_list_players():
     return json.dumps(names)
 
 
+@app.route("/about/")
+def show_about():
+    githubLink = "https://github.com/JamesLaverack/scoreboard"
+
+    return render_template('about.html', githubLink=githubLink)
+
+    
+
 @app.route("/")
 def show_index():
     conn = db.database_connection()
