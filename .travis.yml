@@ -16,4 +16,4 @@ before_script:
 env:
  - DATABASE_URL=postgres://postgres@localhost/scoreboard_test LEADERBOARD_SCORE_THREASHOLD=3 OPPONENTS_WIN_PERCENTAGE_WEIGHT=0.5
 
-script: python runtests.py
+script: python test.py
