@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block titlebar %}
-<h1>Submit Score for {{ gamename }}</h1>
+<h1>Submit Score for {{ game_name }}</h1>
 {% endblock %}
 
 {% block styles %}
@@ -19,9 +19,9 @@
     <div style="text-align: center;">
       <p class="huge-text">
 	Hey, did you hear that 
-	<input type="text" class="form-control player-list" id="winnerName" name="winnerName" placeholder="Winner" autocomplete="off">
+	<input type="text" class="form-control player-list" id="winnerName" name="winner_name" placeholder="Winner" autocomplete="off">
 	just destroyed
-	<input type="text" class="form-control player-list" id="loserName" name="loserName" placeholder="Loser" autocomplete="off">
+	<input type="text" class="form-control player-list" id="loserName" name="loser_name" placeholder="Loser" autocomplete="off">
 	at {{ gamename }}?
       </p>
     </div>

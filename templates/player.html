@@ -14,14 +14,14 @@
     <div class="panel-heading">
       <h3 class="panel-title">Recent Scores</h3>
     </div>
-    {% if recentScores|length > 0 %}
+    {% if recent_scores|length > 0 %}
     <table class="table">
       <tr>
 	<th>Game</th>
 	<th>Winner</th>
 	<th>Loser</th>
       </tr>
-      {% for score in recentScores %}
+      {% for score in recent_scores %}
       <tr>
 	<td>{{ score['game_name'] }}</td>
 	<td>{{ score['winner_name'] }}</td>

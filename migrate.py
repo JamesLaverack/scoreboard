@@ -5,10 +5,10 @@ def init_db():
     conn = db.database_connection()
     cur = conn.cursor()
 
-    schemaFile = open('schema.sql')
-    cur.execute(schemaFile.read())
+    schema_file = open('schema.sql')
+    cur.execute(schema_file.read())
 
-    schemaFile.close()
+    schema_file.close()
 
     conn.commit()
 

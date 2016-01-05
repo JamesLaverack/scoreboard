@@ -24,25 +24,24 @@ def api_list_players():
 
 @app.route("/about/")
 def show_about():
-    githubLink = "https://github.com/JamesLaverack/scoreboard"
+    github_link = "https://github.com/JamesLaverack/scoreboard"
 
-    return render_template('about.html', githubLink=githubLink)
+    return render_template('about.html', github_link=github_link)
 
-    
 
 @app.route("/")
 def show_index():
     conn = db.database_connection()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     cur.execute("SELECT name FROM (SELECT game.name, count(score.id) AS num_games FROM game LEFT JOIN score ON score.game_id = game.id GROUP BY game.name) AS games WHERE num_games > 3 ORDER BY num_games")
-    popularGames = [x['name'] for x in cur.fetchall()]
+    popular_games = [x['name'] for x in cur.fetchall()]
 
     cur.execute("SELECT game.name AS game_name, winner.name AS winner_name, loser.name AS loser_name FROM score JOIN game ON score.game_id = game.id  JOIN player winner ON winner.id = score.winner_id JOIN player loser ON loser.id = score.loser_id ORDER BY score.happened DESC LIMIT 5")
-    recentScores = cur.fetchall()
+    recent_scores = cur.fetchall()
 
     return render_template('index.html',
-                           popularGames=popularGames,
-                           recentScores=recentScores)
+                           popular_games=popular_games,
+                           recent_scores=recent_scores)
 
 
 @app.route("/player/")
@@ -63,18 +62,18 @@ def show_player(name):
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
     cur.execute("SELECT game.name AS game_name, winner.name AS winner_name, loser.name AS loser_name FROM score JOIN game ON score.game_id = game.id  JOIN player winner ON winner.id = score.winner_id JOIN player loser ON loser.id = score.loser_id WHERE winner.name = %s OR loser.name = %s ORDER BY score.happened DESC LIMIT 5", [name, name])
-    recentScores = cur.fetchall()
+    recent_scores = cur.fetchall()
 
     return render_template('player.html',
                            name=name,
-                           recentScores=recentScores)
+                           recent_scores=recent_scores)
 
 
-@app.route("/game/<gamename>/")
-def show_game(gamename):
+@app.route("/game/<game_name>/")
+def show_game(game_name):
     conn = db.database_connection()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    cur.execute("SELECT id FROM game WHERE name = %s", [gamename])
+    cur.execute("SELECT id FROM game WHERE name = %s", [game_name])
     id = cur.fetchone()
 
     if id is None:
@@ -85,11 +84,11 @@ def show_game(gamename):
     cur.execute("SELECT winner.name AS winner_name, loser.name AS loser_name FROM score JOIN player winner ON winner.id = score.winner_id JOIN player loser ON loser.id = score.loser_id WHERE score.game_id = %s ORDER BY score.happened DESC LIMIT 3", [id])
     scores = cur.fetchall()
 
-    rankings = rpi.calculate_rpi(gamename)
+    rankings = rpi.calculate_rpi(game_name)
     leaderboard = rpi.generate_leaderboard(rankings)
 
     return render_template('game.html',
-                           gamename=gamename,
+                           game_name=game_name,
                            scores=scores,
                            leaderboard=leaderboard)
 
@@ -99,7 +98,9 @@ def show_games():
     cur = db.database_connection().cursor()
     cur.execute("SELECT name FROM game")
 
-    return render_template('games.html', games=cur.fetchall())
+    games = [x[0] for x in cur.fetchall()]
+
+    return render_template('games.html', games=games)
 
 
 @app.route("/game/", methods=['POST'])
@@ -107,60 +108,60 @@ def add_game():
     conn = db.database_connection()
     cur = conn.cursor()
     cur.execute("INSERT INTO game (name) VALUES (%s)",
-                [request.form['gameName']])
+                [request.form['game_name']])
     conn.commit()
 
-    return redirect(url_for('show_game', gamename=request.form['gameName']))
+    return redirect(url_for('show_game', game_name=request.form['game_name']))
 
 
-@app.route("/game/<gamename>/submit/")
-def show_submit_score(gamename):
-    if not game_exists(gamename):
+@app.route("/game/<game_name>/submit/")
+def show_submit_score(game_name):
+    if not game_exists(game_name):
         abort(404)
 
-    return render_template('submit.html', gamename=gamename)
+    return render_template('submit.html', game_name=game_name)
 
 
-def get_or_create_id_for_player(playerName):
+def get_or_create_id_for_player(player_name):
     conn = db.database_connection()
     cur = conn.cursor()
 
     cur.execute("SELECT id FROM player WHERE name = %s",
-                [playerName])
-    playerId = cur.fetchone()
+                [player_name])
+    player_id = cur.fetchone()
 
     # If it doesn't exist, make it
-    if playerId is None:
+    if player_id is None:
         cur.execute("INSERT INTO player (name) VALUES (%s)",
-                    [playerName])
+                    [player_name])
         conn.commit()
-        cur.execute("SELECT id FROM player WHERE name = %s", [playerName])
-        playerId = cur.fetchone()
+        cur.execute("SELECT id FROM player WHERE name = %s", [player_name])
+        player_id = cur.fetchone()
 
-    return playerId
+    return player_id
 
 
-@app.route("/game/<gamename>/submit/", methods=['POST'])
-def submit_score(gamename):
-    if not game_exists(gamename):
+@app.route("/game/<game_name>/submit/", methods=['POST'])
+def submit_score(game_name):
+    if not game_exists(game_name):
         abort(404)
 
-    winnerId = get_or_create_id_for_player(request.form['winnerName'])
-    loserId = get_or_create_id_for_player(request.form['loserName'])
+    winner_id = get_or_create_id_for_player(request.form['winner_name'])
+    loser_id = get_or_create_id_for_player(request.form['loser_name'])
 
     conn = db.database_connection()
     cur = conn.cursor()
     cur.execute("""INSERT INTO score (winner_id, loser_id, game_id)
     VALUES (%s, %s, (SELECT id FROM game WHERE name = %s))""",
-                (winnerId, loserId, gamename))
+                (winner_id, loser_id, game_name))
     conn.commit()
 
-    return redirect(url_for('show_game', gamename=gamename))
+    return redirect(url_for('show_game', game_name=game_name))
 
 
-def game_exists(gamename):
+def game_exists(game_name):
     cur = db.database_connection().cursor()
-    cur.execute("SELECT id FROM game WHERE name = %s", [gamename])
+    cur.execute("SELECT id FROM game WHERE name = %s", [game_name])
     return cur.fetchone() is not None
 
 
@@ -170,19 +171,19 @@ def player_exists(name):
     return cur.fetchone() is not None
 
 
-@app.route("/game/<gamename>/leaderboard/")
-def show_leaderboard(gamename):
-    if not game_exists(gamename):
+@app.route("/game/<game_name>/leaderboard/")
+def show_leaderboard(game_name):
+    if not game_exists(game_name):
         abort(404)
 
-    scoreThreashold = int(os.environ["LEADERBOARD_SCORE_THREASHOLD"])
+    score_threashold = int(os.environ["LEADERBOARD_SCORE_THREASHOLD"])
 
-    leaderboard = rpi.generate_leaderboard(rpi.calculate_rpi(gamename))
+    leaderboard = rpi.generate_leaderboard(rpi.calculate_rpi(game_name))
     print("Final leaderboard: %s" % leaderboard)
     return render_template('leaderboard.html',
-                           gamename=gamename,
+                           game_name=game_name,
                            leaderboard=leaderboard,
-                           scoreThreashold=scoreThreashold)
+                           score_threashold=score_threashold)
 
 
 @app.errorhandler(404)

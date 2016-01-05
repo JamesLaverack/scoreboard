@@ -10,9 +10,9 @@
     <div class="panel-heading">
       <h3 class="panel-title">Popular Games</h3>
     </div>
-    {% if popularGames|length > 0 %}
+    {% if popular_games|length > 0 %}
     <ul class="list-group">
-      {% for game in popularGames %}
+      {% for game in popular_games %}
       <li class="list-group-item">
 	<div class="row">
 	  <div class="col-md-4">
@@ -20,10 +20,10 @@
 	  </div>
 	  <div class="col-md-4 col-md-offset-4">
 	    <div class="btn-group pull-right">
-	      <a href="{{ url_for('show_game', gamename=game) }}" type="button" class="btn btn-success">
+	      <a href="{{ url_for('show_game', game_name=game) }}" type="button" class="btn btn-success">
 		<i class="fa fa-th-large"></i> Details
 	      </a>
-	      <a href="{{ url_for('show_leaderboard', gamename=game) }}" type="button" class="btn btn-default">
+	      <a href="{{ url_for('show_leaderboard', game_name=game) }}" type="button" class="btn btn-default">
 		<i class="fa fa-th-list"></i> Leaderboard
 	      </a>
 	    </div>
@@ -46,14 +46,14 @@
     <div class="panel-heading">
       <h3 class="panel-title">Recent Scores</h3>
     </div>
-    {% if recentScores|length > 0 %}
+    {% if recent_scores|length > 0 %}
     <table class="table">
       <tr>
 	<th>Game</th>
 	<th>Winner</th>
 	<th>Loser</th>
       </tr>
-      {% for score in recentScores %}
+      {% for score in recent_scores %}
       <tr>
 	<td>{{ score['game_name'] }}</td>
 	<td>{{ score['winner_name'] }}</td>

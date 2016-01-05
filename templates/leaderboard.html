@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 {% block title %}
-{{super()}} - {{ gamename }} Leaderboard
+{{super()}} - {{ game_name }} Leaderboard
 {% endblock %}
 
 {% block titlebar %}
-<h1>{{ gamename }} Leaderboard</h1>
+<h1>{{ game_name }} Leaderboard</h1>
 {% endblock %}
 
 {% block content %}
@@ -13,7 +13,7 @@
   
   <div class="panel panel-default">
     <div class="panel-body">
-      <a href="{{ url_for('show_game', gamename=gamename) }}" type="button" class="btn btn-default">
+      <a href="{{ url_for('show_game', game_name=game_name) }}" type="button" class="btn btn-default">
 	<i class="fa fa-th-large"></i> Game Details
       </a>
     </div>
@@ -38,12 +38,12 @@
     </table>
     {% else %}
     <div class="panel-body center-text">
-      There are no ranked players for {{ gamename }}.
+      There are no ranked players for {{ game_name }}.
     </div>
     {% endif %}
     {% if scoreThreashold is defined %}
     <div class="panel-footer">
-      <span class="text-muted">Players must have played at least {{ scoreThreashold }} times to be ranked.</span>
+      <span class="text-muted">Players must have played at least {{ score_threashold }} times to be ranked.</span>
     </div>
     {% endif %}
   </div>

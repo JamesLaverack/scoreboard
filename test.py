@@ -31,9 +31,9 @@ class IndexPageTestCase(unittest.TestCase):
         assert "TestGame Leaderboard" in str(rv.data)
 
 
-def create_game(app, gameName):
+def create_game(app, game_name):
     app.post('/game/',
-             data=dict(gameName=gameName))
+             data=dict(game_name=game_name))
 
 
 if __name__ == '__main__':

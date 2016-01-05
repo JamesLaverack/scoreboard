@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 {% block title %}
-{{super()}} - {{ gamename }}
+{{super()}} - {{ game_name }}
 {% endblock %}
 
 {% block titlebar %}
-<h1>{{ gamename }}</h1>
+<h1>{{ game_name }}</h1>
 {% endblock %}
 
 {% block content %}
@@ -33,7 +33,7 @@
     </div>
     {% endif %}
     <div class="panel-footer">
-      <a href="{{ url_for('show_submit_score', gamename=gamename) }}" class="btn btn-primary"><i class="fa fa-paper-plane"></i> Submit Score</a>
+      <a href="{{ url_for('show_submit_score', game_name=game_name) }}" class="btn btn-primary"><i class="fa fa-paper-plane"></i> Submit Score</a>
     </div>
   </div>
 
@@ -58,11 +58,11 @@
     </table>
     {% else %}
     <div class="panel-body center-text">
-      There are no ranked players for {{ gamename }}.
+      There are no ranked players for {{ game_name }}.
     </div>
     {% endif %}
     <div class="panel-footer">
-      <a href="{{ url_for('show_leaderboard', gamename=gamename) }}" class="btn btn-default"><i class="fa fa-th-list"></i> Full Leaderbaoard</a>
+      <a href="{{ url_for('show_leaderboard', game_name=game_name) }}" class="btn btn-default"><i class="fa fa-th-list"></i> Full Leaderbaoard</a>
     </div>
   </div>
 

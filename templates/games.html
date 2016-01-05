@@ -21,14 +21,14 @@
       <li class="list-group-item">
 	<div class="row">
 	  <div class="col-md-4">
-	    <h5>{{ game[0] }}</h5>
+	    <h5>{{ game }}</h5>
 	  </div>
 	  <div class="col-md-4 col-md-offset-4">
 	    <div class="btn-group pull-right">
-	      <a href="{{ url_for('show_game', gamename=game[0]) }}" type="button" class="btn btn-success">
+	      <a href="{{ url_for('show_game', game_name=game) }}" type="button" class="btn btn-success">
 		<i class="fa fa-th-large"></i> Details
 	      </a>
-	      <a href="{{ url_for('show_leaderboard', gamename=game[0]) }}" type="button" class="btn btn-default">
+	      <a href="{{ url_for('show_leaderboard', game_name=game) }}" type="button" class="btn btn-default">
 		<i class="fa fa-th-list"></i> Leaderboard
 	      </a>
 	    </div>
@@ -47,7 +47,7 @@
   <div class="row">
     <form method="post" class="col-xs-4 pull-right">
       <div class="input-group">
-	<input type="text" class="form-control" name="gameName" placeholder="name">
+	<input type="text" class="form-control" name="game_name" placeholder="name">
 	<span class="input-group-btn">
           <button class="btn btn-primary" type="submit"><i class="fa fa-plus"></i> Add New Game</button>
 	</span>
