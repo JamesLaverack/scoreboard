@@ -8,6 +8,8 @@ def init_db():
     schemaFile = open('schema.sql')
     cur.execute(schemaFile.read())
 
+    schemaFile.close()
+
     conn.commit()
 
 
