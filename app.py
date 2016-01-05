@@ -70,7 +70,7 @@ def show_player(name):
                            recentScores=recentScores)
 
 
-@app.route("/game/<gamename>")
+@app.route("/game/<gamename>/")
 def show_game(gamename):
     conn = db.database_connection()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -113,7 +113,7 @@ def add_game():
     return redirect(url_for('show_game', gamename=request.form['gameName']))
 
 
-@app.route("/game/<gamename>/submit")
+@app.route("/game/<gamename>/submit/")
 def show_submit_score(gamename):
     if not game_exists(gamename):
         abort(404)
@@ -140,7 +140,7 @@ def get_or_create_id_for_player(playerName):
     return playerId
 
 
-@app.route("/game/<gamename>/submit", methods=['POST'])
+@app.route("/game/<gamename>/submit/", methods=['POST'])
 def submit_score(gamename):
     if not game_exists(gamename):
         abort(404)
@@ -170,7 +170,7 @@ def player_exists(name):
     return cur.fetchone() is not None
 
 
-@app.route("/game/<gamename>/leaderboard")
+@app.route("/game/<gamename>/leaderboard/")
 def show_leaderboard(gamename):
     if not game_exists(gamename):
         abort(404)
