@@ -1,13 +1,17 @@
+# Scoreboard
+
+[![Build Status](https://travis-ci.org/JamesLaverack/scoreboard.svg?branch=master)](https://travis-ci.org/JamesLaverack/scoreboard)
+
 Scoreboard tracks score and ranks players who compete in two-player games. Scoreboard assumes no information about the relative score is available, meerly that two players competed and one of them was the winner and one of them was the loser. Draws are simiaraly ignored.
 
 Scoring is calculated as a simple win percentage, weighted by the opponents win percentage.
 
-# Requirements
+## Requirements
 
 * Python 3.4+
 * PostgreSQL 9.3+
 
-# Environment Variables
+## Environment Variables
 
 * `DATABASE_URL` specifies the database. e.g. "postgres://username:password@host/database"
 * `LEADERBOARD_SCORE_THREASHOLD` specifies the number of times a player must have played to be ranked. Unranked players do not contribute to opponent's win percentage calcualtions. This must be an integer value.
