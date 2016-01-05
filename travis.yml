@@ -1,0 +1,21 @@
+language: python
+python:
+ - "3.4"
+
+install: pip install -r requirements.txt
+
+addons:
+  postgresql: "9.3"
+
+services:
+  - postgresql
+
+before_script:
+  - psql -c 'create database scoreboard_test;' -U postgres
+
+env:
+ - DATABASE_URL=postgres://postgres@localhost/scoreboard_test
+ - LEADERBOARD_SCORE_THREASHOLD=3
+ - OPPONENTS_WIN_PERCENTAGE_WEIGHT=0.5
+
+script: python test.py
